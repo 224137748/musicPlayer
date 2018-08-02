@@ -13,3 +13,20 @@ export function getMusic (songmid) {
     return Promise.resolve(res.data)
   })
 }
+
+// 获取歌曲音频
+export function getMusicUrl (songName) {
+  const SingIdurl = `http://musicapi.yuiyu.cn/search`
+  const musicUrl = `http://musicapi.yuiyu.cn/music/url`
+  const data = {
+    keywords: songName
+  }
+  return axios.get(SingIdurl, {params: data}).then(res => {
+    let data = {
+      id: res.data.result.songs[0].id
+    }
+    return axios.get(musicUrl, {params: data}).then(res => {
+      return Promise.resolve(res.data)
+    })
+  })
+}
