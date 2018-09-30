@@ -15,13 +15,13 @@
     <div class="recommend-list">
       <h1 class="list-title">热门歌单推荐</h1>
       <ul>
-        <li v-for="(item, index) in discList" class="item" :key="index">
+        <li v-for="(item, index) in discList" class="item" :key="index" @click="selectItem(item)">
           <div class="icon">
-            <img v-lazy="item.imgurl" alt="" width="60" height="60">
+            <img v-lazy="item.picUrl" alt="" width="60" height="60" @load="loadImage">
           </div>
           <div class="text">
-            <h2 class="name" v-html="item.creator.name"></h2>
-            <p class="desc" v-html="item.dissname"></p>
+            <h2 class="name" v-html="item.name"></h2>
+            <p class="desc">🎧：{{parseInt(item.playCount/1000)}}万</p>
           </div>
         </li>
       </ul>
@@ -31,6 +31,7 @@
     <loading></loading>
   </div>
   </scroll>
+  <router-view></router-view>
 </div>
 </template>
 <script type="text/ecmascript-6">
@@ -40,6 +41,7 @@ import Slider from 'base/slider/slider'
 import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import { playlistMixin } from 'common/js/mixin'
+import { mapMutations } from 'vuex'
 export default {
   mixins: [playlistMixin],
   data () {
@@ -72,17 +74,24 @@ export default {
     },
     _getDiscList () {
       getDiscList().then((res) => {
-        if (res.code === ERR_OK) {
-          this.discList = res.data.list
+        if (res.code === 200) {
+          // console.log(res)
+          this.discList = res.result.splice(0, 20)
         }
       })
-    }
-  },
-  loadImage () {
-    if (!this.checkLoaded) {
+    },
+    selectItem(item) {
+      this.$router.push({
+        path: `recommend/${item.id}`
+      })
+      this.setDisc(item)
+    },
+    loadImage () {
       this.$refs.scroll.refresh()
-      this.checkLoaded = true
-    }
+    },
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    })
   }
 }
 </script>

@@ -13,7 +13,7 @@
     </ul>
     <div class="list-shortcut" @touchstart.stop.prevent="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
       <ul>
-        <li class="item" :class="{'current': currentIndex === index}" v-for="(item, index) of shortcuelist" :key="index">{{item}}</li>
+        <li class="item" :class="{'current': currentIndex === index}" v-for="(item, index) of shortcuelist" :key="index" :data-index="index">{{item}}</li>
       </ul>
     </div>
     <div class="list-fixed" v-show="fixedTitle" ref="fixed">

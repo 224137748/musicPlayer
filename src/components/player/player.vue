@@ -95,7 +95,7 @@ import { playMode } from 'common/js/config'
 import { mapGetters, mapMutations } from 'vuex'
 import animations from 'create-keyframe-animation'
 import { prefixStyle } from 'common/js/dom'
-import { getMusicUrl } from 'api/song'
+import { getMusicUrl, getMusicUrlWYY } from 'api/song'
 import { shuffle } from 'common/js/util'
 import Lyric from 'lyric-parser'
 const transform = prefixStyle('transform')
@@ -213,16 +213,31 @@ export default {
       }
     },
     getLyric () {
-      this.currentSong.getLyric().then((res) => {
-        this.currentLyric = new Lyric(res, this.handleLyric)
-        if (this.playing) {
-          this.currentLyric.play()
-        }
-      }).catch(() => {
-        this.currentLyric = null
-        this.playingLyric = ''
-        this.currentLineNum = 0
-      })
+      // QQ获取歌词
+      if (this.currentSong.isQQ) {
+        this.currentSong.getLyric().then((res) => {
+          this.currentLyric = new Lyric(res, this.handleLyric)
+          if (this.playing) {
+            this.currentLyric.play()
+          }
+        }).catch(() => {
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
+        })
+      } else {
+        // 网易云获取歌词
+        this.currentSong.getLyric2().then((res) => {
+          this.currentLyric = new Lyric(res, this.handleLyric)
+          if (this.playing) {
+            this.currentLyric.play()
+          }
+        }).catch(() => {
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
+        })
+      }
     },
     handleLyric (lyric) {
       let lineNum = lyric.lineNum
@@ -408,14 +423,29 @@ export default {
       if (newSong.id === oldSong.id) {
         return
       }
-      let keywrolds = this.currentSong.singer + this.currentSong.name
-      let res = await getMusicUrl(keywrolds)
-      if (res.code === 200) {
-        if (res.data[0].url) {
-          this.musicUrl = res.data[0].url
-        } else {
-          this.setFullScreen(false)
-          alert('没有版权！')
+      console.log()
+      // QQ音源
+      if (newSong.isQQ) {
+        let keywrolds = this.currentSong.singer + this.currentSong.name
+        let res = await getMusicUrl(keywrolds)
+        if (res.code === 200) {
+          if (res.data[0].url) {
+            this.musicUrl = res.data[0].url
+          } else {
+            this.setFullScreen(false)
+            alert('没有版权！')
+          }
+        }
+      } else {
+        // 网易云音源
+        let res = await getMusicUrlWYY(newSong.id)
+        if (res.code === 200) {
+          if (res.data[0].url) {
+            this.musicUrl = res.data[0].url
+          } else {
+            this.setFullScreen(false)
+            alert('没有版权！')
+          }
         }
       }
       if (this.currentLyric) {

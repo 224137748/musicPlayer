@@ -29,9 +29,26 @@ export function getMusicUrl (songName) {
     })
   })
 }
+// 获取网易云歌曲音频
+export function getMusicUrlWYY (id) {
+  const musicUrl = `http://musicapi.yuiyu.cn/music/url`
+  let data = {
+    id
+  }
+  return axios.get(musicUrl, {params: data}).then(res => {
+    return Promise.resolve(res.data)
+  })
+}
+// 获取网易云歌曲歌词
+export function getLyricWYY (id) {
+  const url = 'http://musicapi.yuiyu.cn/lyric?id=' + id
+  return axios.get(url).then(res => {
+    return Promise.resolve(res.data)
+  })
+}
+
 export function getLyric(mid) {
   const url = '/api/lyric'
-
   const data = Object.assign({}, commonParams, {
     songmid: mid,
     platform: 'yqq',

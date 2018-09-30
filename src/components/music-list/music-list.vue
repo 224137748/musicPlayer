@@ -14,11 +14,22 @@
       <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
-    <scroll :data="songs" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+    <!-- 修改网易云 QQ数据原因造成组件不能复用 -->
+
+    <scroll v-if="isQQ" :data="songs" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem"></song-list>
+        <song-list :songs="songs" @select="selectItem" :isQQ="isQQ"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
+        <loading></loading>
+      </div>
+    </scroll>
+    <!-- 网易云 获取的歌曲列表 -->
+    <scroll v-else :data="songs2" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+      <div class="song-list-wrapper">
+        <song-list :songs="songs2" :isQQ="isQQ" @selectSongs="selectSongs"></song-list>
+      </div>
+      <div class="loading-container" v-show="!songs2.length">
         <loading></loading>
       </div>
     </scroll>
@@ -34,6 +45,10 @@ const RESERVED_HEIGHT = 40
 export default {
   mixins: [playlistMixin],
   props: {
+    isQQ: {
+      type: Boolean,
+      default: true
+    },
     bgImage: {
       type: String,
       default: ''
@@ -44,14 +59,25 @@ export default {
         return []
       }
     },
+    songs2: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
     title: {
+      type: String,
+      default: ''
+    },
+    description: {
       type: String,
       default: ''
     }
   },
   data () {
     return {
-      scrollY: 0
+      scrollY: 0,
+      descriptionShow: false
     }
   },
   created() {
@@ -76,7 +102,6 @@ export default {
   methods: {
     handlePlaylist (playlist) {
       const bottom = playlist.length > 0 ? '60px' : 0
-      console.log(bottom)
       this.$refs.list.$el.style.bottom = bottom
       this.$refs.list.refresh()
     },
@@ -92,10 +117,22 @@ export default {
         index
       })
     },
-    random () {
-      this.randomPlay({
-        list: this.songs
+    selectSongs (item, index) {
+      this.selectPlay({
+        list: this.songs2,
+        index
       })
+    },
+    random () {
+      if (this.isQQ) {
+        this.randomPlay({
+          list: this.songs
+        })
+      } else {
+        this.randomPlay({
+          list: this.songs2
+        })
+      }
     },
     ...mapActions([
       'selectPlay',
@@ -197,6 +234,27 @@ export default {
           display: inline-block
           vertical-align: middle
           font-size: $font-size-small
+    .description
+      position absolute
+      left 0
+      top 0
+      width 100%
+      height 100%
+      box-sizing border-box
+      font-size $font-size-small
+      color: $color-theme
+      line-height 20px;
+      text-indent 2em
+      overflow-y height
+      background rgba(0, 255, 0, .7)
+      .description-text
+        margin 40px 40px 60px
+        display flex
+        justify-content center
+        align-items center
+        max-height 100%
+        box-sizing border-box
+        overflow auto
     .filter
       position: absolute
       top: 0

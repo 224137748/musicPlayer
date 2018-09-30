@@ -1,6 +1,6 @@
 <template>
   <div class="song-list">
-    <ul>
+    <ul >
       <li v-for="(song, index) in songs" :key="index" class="item" @click="selectItem(song, index)">
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
@@ -14,6 +14,10 @@
 
 export default {
   props: {
+    isQQ: {
+      type: Boolean,
+      default: true
+    },
     songs: {
       type: Array,
       default: function () {
@@ -26,7 +30,11 @@ export default {
       return `${song.singer} 。${song.album}`
     },
     selectItem (item, index) {
-      this.$emit('select', item, index)
+      if (this.isQQ) {
+        this.$emit('select', item, index)
+      } else {
+        this.$emit('selectSongs', item, index)
+      }
     }
   },
   mounted() {
