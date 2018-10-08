@@ -59,7 +59,8 @@ export default {
           picUrl: item.coverImgUrl,
           songList: item.tracks.slice(0, 3) || [],
           description: item.description,
-          songs: songs
+          songs: songs,
+          id: item.id
         })
         ret.push(obj)
       })

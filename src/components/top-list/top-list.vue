@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list :title="topList.description" :bgImage="topList.picUrl" :isQQ="false" :songs2="topList.songs"></music-list>
+    <music-list :title="topList.description" :bgImage="bgImage" :isQQ="false" :songs2="topList.songs" :rank="true"></music-list>
   </transition>
 </template>
 <script>
@@ -9,13 +9,19 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      id: ''
     }
   },
   activated() {
     this._getSongs()
   },
   computed: {
+    bgImage() {
+      if (this.topList.songs[0].image) {
+        return this.topList.songs[0].image
+      } else {
+        return this.topList.picUrl
+      }
+    },
     ...mapGetters([
       'topList'
     ])
@@ -25,8 +31,9 @@ export default {
   },
   methods: {
     _getSongs() {
-      console.log(this.$route)
-      this.id = this.$route.params.id || ''
+      if (!this.topList.id) {
+        this.$router.push('/rank')
+      }
     }
   }
 }

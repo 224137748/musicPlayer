@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div class="play" v-show="songs.length" ref="playBtn" @click="random">
+        <div class="play" v-show="songs.length || songs2.length" ref="playBtn" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -27,7 +27,7 @@
     <!-- 网易云 获取的歌曲列表 -->
     <scroll v-else :data="songs2" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div class="song-list-wrapper">
-        <song-list :songs="songs2" :isQQ="isQQ" @selectSongs="selectSongs"></song-list>
+        <song-list :songs="songs2" :isQQ="isQQ" @selectSongs="selectSongs" :rank="rank"></song-list>
       </div>
       <div class="loading-container" v-show="!songs2.length">
         <loading></loading>
@@ -72,6 +72,10 @@ export default {
     description: {
       type: String,
       default: ''
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
