@@ -28,6 +28,9 @@ const mututations = {
   },
   [types.SET_TOPLIST] (state, topList) {
     state.topList = topList
+  },
+  [types.SET_SEARCH_HISTTORY] (state, searchHistory) {
+    state.searchHistory = searchHistory
   }
 }
 export default mututations

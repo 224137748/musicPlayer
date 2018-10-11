@@ -30,6 +30,7 @@
                   {{line.txt}}
                 </p>
               </div>
+              <div class="text" v-else>抱歉，暂未搜索到歌词~！</div>
             </div>
           </scroll>
         </div>
@@ -79,11 +80,12 @@
             <i :class="miniIcon" class="icon-mini" @click.stop="togglePlaying" ref="miniIcon"></i>
           </process-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <playlist ref="playlist"></playlist>
     <audio :src="musicUrl" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
@@ -98,6 +100,7 @@ import { prefixStyle } from 'common/js/dom'
 import { getMusicUrl, getMusicUrlWYY } from 'api/song'
 import { shuffle } from 'common/js/util'
 import Lyric from 'lyric-parser'
+import Playlist from 'components/playlist/playlist'
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 export default {
@@ -116,7 +119,8 @@ export default {
   components: {
     ProgressBar,
     ProcessCircle,
-    Scroll
+    Scroll,
+    Playlist
   },
   created() {
     this.touch = {}
@@ -216,9 +220,15 @@ export default {
       // QQ获取歌词
       if (this.currentSong.isQQ) {
         this.currentSong.getLyric().then((res) => {
-          this.currentLyric = new Lyric(res, this.handleLyric)
-          if (this.playing) {
-            this.currentLyric.play()
+          if (res) {
+            this.currentLyric = new Lyric(res, this.handleLyric)
+            if (this.playing) {
+              this.currentLyric.play()
+            }
+          } else {
+            this.currentLyric = null
+            this.playingLyric = ''
+            this.currentLineNum = 0
           }
         }).catch(() => {
           this.currentLyric = null
@@ -228,9 +238,15 @@ export default {
       } else {
         // 网易云获取歌词
         this.currentSong.getLyric2().then((res) => {
-          this.currentLyric = new Lyric(res, this.handleLyric)
-          if (this.playing) {
-            this.currentLyric.play()
+          if (res) {
+            this.currentLyric = new Lyric(res, this.handleLyric)
+            if (this.playing) {
+              this.currentLyric.play()
+            }
+          } else {
+            this.currentLyric = null
+            this.playingLyric = ''
+            this.currentLineNum = 0
           }
         }).catch(() => {
           this.currentLyric = null
@@ -410,6 +426,9 @@ export default {
         scale
       }
     },
+    showPlaylist() {
+      this.$refs.playlist.show()
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
@@ -423,7 +442,6 @@ export default {
       if (newSong.id === oldSong.id) {
         return
       }
-      console.log()
       // QQ音源
       if (newSong.isQQ) {
         let keywrolds = this.currentSong.singer + this.currentSong.name

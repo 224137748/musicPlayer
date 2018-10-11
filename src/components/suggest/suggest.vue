@@ -1,5 +1,5 @@
 <template>
-  <scroll class="suggest" :data="resultList" ref="suggest">
+  <scroll class="suggest" :data="resultList" :beforeScroll="true" ref="suggest" @beforeScroll="listScroll">
     <ul class="suggest-list">
       <li @click="selectItem(item)" class="suggest-item" v-for="(item, index) of resultList" :key="index">
         <div class="icon">
@@ -10,6 +10,9 @@
         </div>
       </li>
     </ul>
+    <div v-show="!resultList.length" class="no-result-wrapper">
+      <no-result title="'抱歉，暂无搜索结果'"></no-result>
+    </div>
   </scroll>
 </template>
 <script>
@@ -17,6 +20,7 @@ import { search } from 'api/search'
 import { createSong3 } from 'common/js/song'
 import Scroll from 'base/scroll/scroll'
 import { mapActions } from 'vuex'
+import NoResult from 'base/no-result/no-result'
 const SONG_TYPE = 'singer'
 export default {
   props: {
@@ -35,14 +39,19 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    NoResult
   },
   methods: {
     async search() {
       this.$refs.suggest.scrollTo(0, 0)
       let res = await search(this.query)
       if (res.code === 200) {
-        this.resultList = this._normalizeList(res.result.songs)
+        if (res.result.songCount > 0) {
+          this.resultList = this._normalizeList(res.result.songs)
+        } else {
+          this.resultList = []
+        }
       }
     },
     _normalizeList(list) {
@@ -50,7 +59,7 @@ export default {
       list.forEach(item => {
         ret.push(createSong3(item))
       })
-      console.log(ret)
+      // console.log(ret)
       return ret
     },
     getIconCLs(item) {
@@ -67,9 +76,17 @@ export default {
         return `${item.name}-${item.singer}`
       }
     },
+    listScroll() {
+      this.$emit('listScroll')
+    },
     selectItem(item) {
-      console.log(item)
+      // console.log(item)
       this.insertSong(item)
+      // 存入到搜索历史
+      this.$emit('select')
+    },
+    refresh() {
+      this.$refs.suggest.refresh()
     },
     ...mapActions([
       'insertSong'
@@ -79,8 +96,6 @@ export default {
     query(newVal) {
       if (newVal) {
         this.search()
-      } else {
-        this.resultList = []
       }
     }
   }

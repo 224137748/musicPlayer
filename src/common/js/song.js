@@ -36,10 +36,14 @@ export default class Song {
     return new Promise((resolve, reject) => {
       getLyricWYY(this.id).then(res => {
         if (res.code === 200) {
-          this.lyric = res.lrc.lyric
-          resolve(this.lyric)
+          if (res.lrc && res.lrc.lyric) {
+            this.lyric = res.lrc.lyric
+            resolve(this.lyric)
+          } else {
+            reject('抱歉，没搜索到歌词~！')
+          }
         } else {
-          reject('no lyric')
+          reject('抱歉，没搜索到歌词~！')
         }
       })
     })

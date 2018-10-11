@@ -2,6 +2,7 @@
 import * as types from './mutation-types'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/util'
+import { saveSearch, deleteSearch, clearSearch } from 'common/js/cache'
 
 function findIndex (list, song) {
   return list.findIndex((item) => {
@@ -32,8 +33,8 @@ export const randomPlay = function ({commit, state}, {list}) {
   commit(types.SET_PLAYING_STATE, true)
 }
 export const insertSong = function ({commit, state}, song) {
-  let playList = state.playList
-  let sequenceList = state.sequenceList
+  let playList = state.playList.slice()
+  let sequenceList = state.sequenceList.slice()
   let currentIndex = state.currentIndex
   // 记录当前歌曲
   let currentSong = playList[currentIndex]
@@ -68,4 +69,15 @@ export const insertSong = function ({commit, state}, song) {
   commit(types.SET_CURRENT_INDEX, currentIndex)
   commit(types.SET_FULL_SCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
+}
+
+export const saveSearchHistory = function ({commit}, query) {
+  commit(types.SET_SEARCH_HISTTORY, saveSearch(query))
+}
+
+export const deleteSearchHistory = function({commit}, query) {
+  commit(types.SET_SEARCH_HISTTORY, deleteSearch(query))
+}
+export const celarSearchHistory = function({commit}) {
+  commit(types.SET_SEARCH_HISTTORY, clearSearch())
 }

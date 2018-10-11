@@ -23,6 +23,10 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -44,6 +48,11 @@ export default {
         let _that = this
         this.scroll.on('scroll', (pos) => {
           _that.$emit('scroll', pos)
+        })
+      }
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll')
         })
       }
     },
