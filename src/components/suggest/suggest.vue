@@ -10,7 +10,8 @@
         </div>
       </li>
     </ul>
-    <div v-show="!resultList.length" class="no-result-wrapper">
+    <loading :title="'搜索中...'" v-show="loadingType"></loading>
+    <div v-show="empty" class="no-result-wrapper">
       <no-result title="'抱歉，暂无搜索结果'"></no-result>
     </div>
   </scroll>
@@ -22,6 +23,7 @@ import Scroll from 'base/scroll/scroll'
 import { mapActions } from 'vuex'
 import NoResult from 'base/no-result/no-result'
 const SONG_TYPE = 'singer'
+import Loading from 'base/loading/loading'
 export default {
   props: {
     query: {
@@ -35,22 +37,29 @@ export default {
   },
   data() {
     return {
-      resultList: []
+      resultList: [],
+      empty: false,
+      loadingType: false
     }
   },
   components: {
     Scroll,
-    NoResult
+    NoResult,
+    Loading
   },
   methods: {
     async search() {
       this.$refs.suggest.scrollTo(0, 0)
+      this.loadingType = true
       let res = await search(this.query)
+      this.loadingType = false
       if (res.code === 200) {
         if (res.result.songCount > 0) {
+          this.empty = false
           this.resultList = this._normalizeList(res.result.songs)
         } else {
           this.resultList = []
+          this.empty = true
         }
       }
     },
@@ -95,6 +104,7 @@ export default {
   watch: {
     query(newVal) {
       if (newVal) {
+        this.resultList = []
         this.search()
       }
     }

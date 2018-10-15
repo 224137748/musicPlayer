@@ -94,6 +94,19 @@ export function createSong3 (musicData) {
     isQQ: false
   })
 }
+export function createSOng4 (musicData) {
+  return new Song({
+    id: musicData.id,
+    mid: musicData.mid,
+    singer: musicData.singer,
+    name: musicData.name,
+    album: musicData.album,
+    duration: musicData.duration,
+    image: musicData.image,
+    url: musicData.url,
+    isQQ: musicData.isQQ
+  })
+}
 function filterSinger(singer) {
   let ret = []
   if (!singer) {

@@ -31,6 +31,9 @@ const mututations = {
   },
   [types.SET_SEARCH_HISTTORY] (state, searchHistory) {
     state.searchHistory = searchHistory
+  },
+  [types.SET_PLAY_HISTTORY] (state, playHistory) {
+    state.playHistory = playHistory
   }
 }
 export default mututations
