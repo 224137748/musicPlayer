@@ -27,7 +27,9 @@ import Loading from 'base/loading/loading'
 import { getTopList } from 'api/rank'
 import { mapMutations } from 'vuex'
 import { createSong2 } from 'common/js/song'
+import { playlistMixin } from 'common/js/mixin'
 export default {
+  mixins: [playlistMixin],
   data () {
     return {
       topList: []
@@ -41,6 +43,11 @@ export default {
     Scroll
   },
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.rank.style.bottom = bottom
+      this.$refs.toplist.refresh()
+    },
     async _getTopList() {
       let res = await getTopList()
       this.topList = this._normolizeList(res)
