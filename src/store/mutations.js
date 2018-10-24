@@ -34,6 +34,9 @@ const mututations = {
   },
   [types.SET_PLAY_HISTTORY] (state, playHistory) {
     state.playHistory = playHistory
+  },
+  [types.SET_FAVORITE_LIST] (state, list) {
+    state.favoriteList = list
   }
 }
 export default mututations
