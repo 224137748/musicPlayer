@@ -1,7 +1,6 @@
 <template>
   <div class="m-header">
     <div class="icon"></div>
-    <h1 class="text">Chicken Music</h1>
     <router-link to="/user" class="mine" tag="div">
       <i class="icon-mine"></i>
     </router-link>
@@ -24,12 +23,11 @@ export default {
     .icon
       display:inline-block
       vertical-align :top
-      margin-top :6px
-      width: 30px
-      height: 32px
-      margin-right: 9px
-      bg-image('logo')
-      background-size: 30px 32px
+      margin-top :10px
+      width: 90px
+      height: 25px
+      background: url('./logo.png') no-repeat
+      background-size :90px 25px
     .text
       display: inline-block
       vertical-align: top

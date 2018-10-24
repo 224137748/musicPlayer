@@ -17,7 +17,7 @@
       <ul>
         <li v-for="(item, index) in discList" class="item" :key="index" @click="selectItem(item)">
           <div class="icon">
-            <img v-lazy="item.picUrl" alt="" width="60" height="60" @load="loadImage">
+            <img v-lazy="smallImage(item.picUrl)" alt="" width="60" height="60" @load="loadImage">
           </div>
           <div class="text">
             <h2 class="name" v-html="item.name"></h2>
@@ -88,6 +88,9 @@ export default {
     },
     loadImage () {
       this.$refs.scroll.refresh()
+    },
+    smallImage(url) {
+      return url + '?imageView&thumbnail=246x0&quality=75&tostatic=0&type=jpg'
     },
     ...mapMutations({
       setDisc: 'SET_DISC'

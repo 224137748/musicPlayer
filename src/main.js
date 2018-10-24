@@ -10,7 +10,7 @@ fastclick.attach(document.body)
 
 Vue.config.productionTip = false
 Vue.use(VueLacyLoad, {
-  loading: require('common/image/default.png')
+  loading: require('common/image/default.jpg')
 })
 
 /* eslint-disable no-new */
