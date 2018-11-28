@@ -114,7 +114,8 @@ export default {
       currentLyric: null,
       currentLineNum: 0,
       currentShow: 'cd',
-      playingLyric: ''
+      playingLyric: '',
+      isReady: false
     }
   },
   components: {
@@ -127,6 +128,7 @@ export default {
     this.touch = {}
   },
   mounted() {
+    this.readyAudio()
   },
   computed: {
     palyIcon () {
@@ -151,6 +153,26 @@ export default {
     ])
   },
   methods: {
+    readyAudio() {
+      if (this.$refs.audio) {
+        console.log('get audo Dom')
+        window.addEventListener('touchstart', this.forceSafariPlayAudio, false)
+      } else {
+        setTimeout(() => {
+          this.readyAudio()
+        }, 200)
+      }
+    },
+    forceSafariPlayAudio() {
+      console.log('window add click')
+      if (!this.isReady) {
+        this.isReady = true
+        this.$refs.audio.play()
+        setTimeout(() => {
+          this.$refs.audio.pause()
+        }, 50)
+      }
+    },
     back () {
       this.setFullScreen(false)
     },
@@ -466,7 +488,14 @@ export default {
         const audio = this.$refs.audio
         newVal ? audio.play() : audio.pause()
       }, 50)
+    },
+    isReady (newVal) {
+      if (newVal) {
+        console.log(newVal, 'window remove click')
+        window.removeEventListener('touchstart', this.forceSafariPlayAudio, false)
+      }
     }
+
   }
 }
 </script>
