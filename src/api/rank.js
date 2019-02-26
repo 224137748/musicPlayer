@@ -1,7 +1,7 @@
 // import jsonp from 'common/js/jsonp'
 // import { commonParams, options } from './config'
 import axios from 'axios'
-let baseUrl = 'http://musicapi.yuiyu.cn'
+let baseUrl = 'http://aixbx.xyz:3000'
 export function getTopList () {
   let ret = []
   return axios.all([

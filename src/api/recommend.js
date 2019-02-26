@@ -1,7 +1,7 @@
 import jsonp from 'common/js/jsonp'
 import {commonParams, options} from './config'
 import axios from 'axios'
-const baseUrl = 'http://musicapi.yuiyu.cn'
+const baseUrl = 'http://aixbx.xyz:3000'
 
 export function getRecommend() {
   const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'

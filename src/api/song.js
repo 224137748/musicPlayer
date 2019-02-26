@@ -3,7 +3,7 @@ import { commonParams } from './config'
 import axios from 'axios'
 
 export function getMusic (songmid) {
-  const url = '/music/url'
+  const url = '/song/url'
   const data = {
     id: 33894312
   }
@@ -15,8 +15,8 @@ export function getMusic (songmid) {
 }
 // 获取歌曲音频
 export function getMusicUrl (songName) {
-  const SingIdurl = `http://musicapi.yuiyu.cn/search`
-  const musicUrl = `http://musicapi.yuiyu.cn/music/url`
+  const SingIdurl = `http://aixbx.xyz:3000/search`
+  const musicUrl = `http://aixbx.xyz:3000/song/url`
   const data = {
     keywords: songName
   }
@@ -31,7 +31,7 @@ export function getMusicUrl (songName) {
 }
 // 获取网易云歌曲音频
 export function getMusicUrlWYY (id) {
-  const musicUrl = `http://musicapi.yuiyu.cn/music/url`
+  const musicUrl = `http://aixbx.xyz:3000/song/url`
   let data = {
     id
   }
@@ -41,7 +41,7 @@ export function getMusicUrlWYY (id) {
 }
 // 获取网易云歌曲歌词
 export function getLyricWYY (id) {
-  const url = 'http://musicapi.yuiyu.cn/lyric?id=' + id
+  const url = 'http://aixbx.xyz:3000/lyric?id=' + id
   return axios.get(url).then(res => {
     return Promise.resolve(res.data)
   })

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://musicapi.yuiyu.cn'
+const baseUrl = 'http://aixbx.xyz:3000'
 export function getHotKey () {
   const url = baseUrl + '/search/hot'
   return axios.get(url).then(res => {
