@@ -15,8 +15,8 @@ export function getMusic (songmid) {
 }
 // 获取歌曲音频
 export function getMusicUrl (songName) {
-  const SingIdurl = `http://94.191.41.158:3000/search`
-  const musicUrl = `http://94.191.41.158:3000/song/url`
+  const SingIdurl = `http://findream.vip:3000/search`
+  const musicUrl = `http://findream.vip:3000/song/url`
   const data = {
     keywords: songName
   }
@@ -31,7 +31,7 @@ export function getMusicUrl (songName) {
 }
 // 获取网易云歌曲音频
 export function getMusicUrlWYY (id) {
-  const musicUrl = `http://94.191.41.158:3000/song/url`
+  const musicUrl = `http://findream.vip:3000/song/url`
   let data = {
     id
   }
@@ -41,7 +41,7 @@ export function getMusicUrlWYY (id) {
 }
 // 获取网易云歌曲歌词
 export function getLyricWYY (id) {
-  const url = 'http://94.191.41.158:3000/lyric?id=' + id
+  const url = 'http://findream.vip:3000/lyric?id=' + id
   return axios.get(url).then(res => {
     return Promise.resolve(res.data)
   })

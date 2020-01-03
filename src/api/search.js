@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://94.191.41.158:3000'
+const baseUrl = 'http://findream.vip:3000'
 export function getHotKey () {
   const url = baseUrl + '/search/hot'
   return axios.get(url).then(res => {
