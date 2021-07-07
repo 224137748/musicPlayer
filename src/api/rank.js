@@ -1,7 +1,7 @@
 // import jsonp from 'common/js/jsonp'
 // import { commonParams, options } from './config'
 import axios from 'axios'
-let baseUrl = 'http://findream.vip:3000'
+let baseUrl = 'http://findream.vip/api/music'
 export function getTopList () {
   let ret = []
   return axios.all([
